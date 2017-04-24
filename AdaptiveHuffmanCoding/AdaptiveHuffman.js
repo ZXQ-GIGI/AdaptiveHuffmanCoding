@@ -69,3 +69,44 @@ Tree.prototype.isExist = function(char) {
 	}
 };
 
+Tree.prototype.newToAdd = function(char) {
+
+	if(isExist(char)){
+		//to do..
+	}
+	else{
+		//to do..
+	}
+};
+
+Tree.prototype.getSubtree = function(parent_node) {
+
+	var mark = false;
+	var pRowIndex = 0;
+	var pColIndex = 0;
+	var subtree = new Array();
+
+	//get index of parent node
+	for(var i = 0; i < this.tree.length; i++){
+		for(var j = 0; j < this.tree[i].length; j++){
+			if(this.tree[i][j] == parent_node){
+				pRowIndex = i;
+				pColIndex = j;
+				mark = true;
+				break;
+			}
+		}
+		if(mark){
+			break;
+		}
+	}
+
+	for(var i = pRowIndex, m = 0; i < this.tree.length; i++,m++){
+		for(var j = pColIndex * pow(2,m); j < (pColIndex+1) * pow(2,m); j++){
+
+		}
+	}
+};
+
+
+
