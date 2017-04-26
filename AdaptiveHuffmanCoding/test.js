@@ -1,9 +1,11 @@
 'use strict'
 
-var Tree = require('./AdaptiveHuffman.js');
+var AFC = require('./AdaptiveHuffman.js');
 
-var m0 = new Tree();
+var filePath = './default.txt';
+
+var test = new AFC(filePath);
+test.huffmanCoding();
 
 
-console.log(m0.init());
-console.log(m0.isExist('a'));
+
