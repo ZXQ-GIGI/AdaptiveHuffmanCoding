@@ -92,7 +92,6 @@ Tree.prototype.newToAdd = function(char) {
 		}
 
 		this.addSubtree(this.createNew(char), posNYT);	
-		//console.log(posNYT);
 		currentNode = this.tree[posNYT[0]][posNYT[1]];
 	}
 
@@ -137,29 +136,29 @@ Tree.prototype.getSubtree = function(parent_node) {
 /*
  * check whether the current tree meets brother property
  */
-Tree.prototype.isBrotherPropery = function() {
+// Tree.prototype.isBrotherPropery = function() {
 
-	var treeTemp = this.tree;
-	var greatNum = treeTemp[0][0].getWeight();
+// 	var treeTemp = this.tree;
+// 	var greatNum = treeTemp[0][0].getWeight();
 
-	for(var i = 0;i<treeTemp.length; i++){
-		for(var j = treeTemp[i].length-1; j >= 0; j--){
+// 	for(var i = 0;i<treeTemp.length; i++){
+// 		for(var j = treeTemp[i].length-1; j >= 0; j--){
 
-			if((typeof(treeTemp[i][j]) != undefined) && (treeTemp[i][j] != NULL)){
-				if(treeTemp[i][j].getWeight() <= greatNum){
-					greatNum = treeTemp[i][j].getWeight();
-				}
-				else{
-					return false;
-				}
-			}
-		}
-	}
+// 			if((typeof(treeTemp[i][j]) != undefined) && (treeTemp[i][j] != NULL)){
+// 				if(treeTemp[i][j].getWeight() <= greatNum){
+// 					greatNum = treeTemp[i][j].getWeight();
+// 				}
+// 				else{
+// 					return false;
+// 				}
+// 			}
+// 		}
+// 	}
 
-	if((i == treeTemp.length) && (-1 == j)){
-		return true;
-	}
-};
+// 	if((i == treeTemp.length) && (-1 == j)){
+// 		return true;
+// 	}
+// };
 
 /*
  * get farthest subtree whose parent node is weight 
@@ -211,9 +210,9 @@ Tree.prototype.createNew = function(char) {
 	node.count();
 
 	var new_subtree = [
-						[NULL_node],
-						[NYT_node , node]
-					];
+					[NULL_node],
+					[NYT_node , node]
+				];
 
 	return new_subtree;
 };
@@ -225,7 +224,7 @@ Tree.prototype.getParentNode = function(node) {
 };
 
 Tree.prototype.exchangeSubtree = function(subtree1,node1,subtree2,node2) {
-	console.log('1');
+
 	console.log(this.getNodePos(node2));
 	this.tree.addSubtree(subtree1,this.getNodePos(node2));
 	this.tree.addSubtree(subtree2,this.getNodePos(node1));
