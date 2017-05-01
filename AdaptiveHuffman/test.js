@@ -1,11 +1,11 @@
 'use strict'
 
-var BT = require('./AdaptiveHuffmanCoding.js');
+var AHC = require('./AdaptiveHuffmanCoding.js');
 
-var test = new BT();
+var filePath = './default.txt';
+var test = new AHC(filePath);
+test.init();
 
-//test.levelTraversal();
-console.log(test.isExist('NYT'));
 
 
 
