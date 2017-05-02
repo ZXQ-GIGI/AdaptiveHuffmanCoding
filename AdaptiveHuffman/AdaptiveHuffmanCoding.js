@@ -27,13 +27,12 @@ function Node(data,left,right){
 
 function BinaryTree(){
 	this.root = new Node('root',null,null,null);
-	//this.root.num = -1;
 	this.warehouse = new Array();
 }
 
 // from right to left
 BinaryTree.prototype.levelTraversal = function(node) {
-	
+//	console.log(node);
 	var arr = new Array();
 	arr.push(node);
 	var cur = 0;
@@ -55,82 +54,87 @@ BinaryTree.prototype.levelTraversal = function(node) {
 	return arr;
 };
 	
-
-
 BinaryTree.prototype.newToInsert = function(new_data) {
-	
-	var current = new Node(null,null,null);//node need to add 1
+
+	var current = new Node(null,null,null);		
 	var array = this.levelTraversal(this.root);
-	//console.log(array);
+	var newnode = {};
+
 	if(this.isExist(new_data)){	
-		//the new data has already existed in the tree	
-		current = new Node(null,null,null);	
+		current = {};	
 		console.log(new_data + ' is existed.');	
 		for(var i = 0; i < array.length; i++){
 			if(array[i].data == new_data){
 				current = array[i];
 			}
-		}	 
+		}
+		this.root = array[0];	 
 	}
 	else{
-		console.log(new_data + ' is not existed.');	
-		current = new Node(null,null,null);
-		array[array.length-1].data = null;		
-		array[array.length-1].left = new Node(NYT,null,null);
-		array[array.length-1].right = new Node(new_data,null,null);
-		array[array.length-1].right.count();
-		current = array[array.length-1];
-	}
+		console.log(new_data + ' is not existed.');
+		current = {};	
 
-	while(current.data != this.root.data){
-		var currentNum = current.getNum();
-		array = this.levelTraversal(this.root);
-		var farthest = new Node(null,null,null);
+		var arrTemp = new Array();
+		newnode = this.createNewNode(array,new_data);
+		console.log('-----------------------------');
+		console.log(newnode);//here is problem.
+		arrTemp = this.levelTraversal(newnode); 
 
-		for(var i = 0; i < array.length; i++){
-			if(array[i].num == currentNum){
-				farthest = array[i];
+		console.log('==============================');
+		for(var i = 0; i < arrTemp.length; i++){
+			if(arrTemp[i].left != null && arrTemp[i].left.data == NYT){
+				current = arrTemp[i];
+				break;
 			}
 		}
-	//	console.log(farthest);
+		this.root = arrTemp[0];
+	}
+
+	
+	while(current.data != this.root.data){
+
+		var currentNum = current.getNum();
+		var farthest = {};
+		array = this.levelTraversal(this.root);
+		
+		for(var i = 1; i < array.length; i++){
+			if(array[i].getNum() == currentNum){
+
+				farthest = array[i];
+				break;
+			}
+		}
 		current = this.updateTree(array,current,farthest);
 	}
 	this.root = current;
 	this.root.data = 'root';
 	this.root.count();
 	console.log(this.root);
+	console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> end');
 };
 
-BinaryTree.prototype.isExist = function(newdata) {
-
+BinaryTree.prototype.isExist = function(new_data) {
 
 	for(var i = 0; i < this.warehouse.length; i++){
-		if(this.warehouse.indexOf(newdata) >= 0){
+		if(this.warehouse.indexOf(new_data) >= 0){
 			return true;
 		}
 	}
-	this.warehouse.push(newdata);
+	this.warehouse.push(new_data);
 	return false;
 };
 
 BinaryTree.prototype.updateTree = function(array,cur_node,far_node) {
 
-	if(cur_node == far_node){
-		array[1].count();
-		array[0].left = array[2];
-		array[0].right = array[1];
-		return array[0];
-	}
-
 	for(var i = 1; i < 3; i++){
 		if(array[i]){
-			if(array[i] == cur_node){
-				array[i] = far_node;
-			}
-			else if(array[i] == far_node){
+			if(array[i] == far_node){
 				array[i] = cur_node;
 				array[i].count();
 			}
+			else if(array[i] == cur_node){
+				array[i] = far_node;
+			}			
 			else{
 				if(array[i].left != null){
 					var sub_array = this.levelTraversal(array[i]);
@@ -141,8 +145,37 @@ BinaryTree.prototype.updateTree = function(array,cur_node,far_node) {
 	}
 	array[0].left = array[2];
 	array[0].right = array[1];
-	console.log('----------------------------');
-	console.log(array[0]);
+
+	return array[0];
+}
+
+BinaryTree.prototype.createNewNode = function(array, new_data) {
+	//console.log(array.length);
+	if(array.length == 1 && array[0].data == 'root'){
+		array[0].left = new Node(NYT,null,null);
+		array[0].right = new Node(new_data,null,null);
+   	 	array[0].right.count();
+		return array[0];
+	}
+
+	for(var i = 1; i < 3; i++){
+		if(array[i]){
+			if(array[i].data == NYT){
+				array[i].data = null;
+				array[i].left = new Node(NYT,null,null);
+				array[i].right = new Node(new_data,null,null);
+				array[i].right.count();
+			}
+			else{
+				if(array[i].left != null){
+					var sub_array = this.levelTraversal(array[i]);
+					array[0] = this.createNewNode(sub_array, new_data);
+				}
+			}	
+		}
+	}
+	array[0].left = array[2];
+	array[0].right = array[1];
 	return array[0];
 }
 
@@ -156,6 +189,7 @@ function AdaptiveHuffman(filePath){
 				throw err;
 			}
 			for(var i = 0; i < data.length; i++){
+				console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< start');
 				console.log(i + ":" + data[i]);
 				this.huffmanTree.newToInsert(data[i]);
 				//console.log(this.huffmanTree);
@@ -163,5 +197,3 @@ function AdaptiveHuffman(filePath){
 		});
 	}
 }
-
-
