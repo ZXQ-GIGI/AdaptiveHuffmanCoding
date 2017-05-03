@@ -70,10 +70,9 @@ BinaryTree.prototype.newToInsert = function(new_data) {
 		this.root = array[0];	 
 	}
 	else{
-		console.log(new_data + ' is not existed.');
-		current = {};	
-
+		console.log(new_data + ' is not existed.');	
 		var arrTemp = new Array();
+		current = {};	
 		newnode = this.createNewNode(array,new_data);
 
 		arrTemp = this.levelTraversal(newnode); 
@@ -94,18 +93,18 @@ BinaryTree.prototype.newToInsert = function(new_data) {
 		array = this.levelTraversal(this.root);
 		
 		for(var i = 1; i < array.length; i++){
-			if(array[i].getNum() == currentNum){
-
+			if(array[i].getNum() == currentNum && array[i].left != current && array[i].right != current){
 				farthest = array[i];
 				break;
 			}
 		}
-		current = this.updateTree(array,current,farthest);
+		this.root = this.updateTree(array,current,farthest);
 		array = this.levelTraversal(this.root);
 		for(var i = 0; i < array.length; i++){
 			if(array[i]){
 				if(array[i].left == current || array[i].right == current){
 					current = array[i];
+					//console.log(current);
 					break;
 				}
 			}	
