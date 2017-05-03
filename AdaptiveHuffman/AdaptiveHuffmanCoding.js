@@ -1,11 +1,11 @@
 'use strict'
-
-var NYT = 'NYT';
 const fs = require('fs');
 module.exports = AdaptiveHuffman;
 
-function Node(data,left,right){
+var NYT = 'NYT';
+var Root = 'root';
 
+function Node(data,left,right){
 	this.data = data;
 	this.left = left;
 	this.right = right;
@@ -16,7 +16,7 @@ function Node(data,left,right){
 }
 
 function BinaryTree(){
-	this.root = new Node('root',null,null,null);
+	this.root = new Node(Root,null,null,null);
 	this.warehouse = new Array();
 }
 
@@ -27,7 +27,6 @@ BinaryTree.prototype.levelTraversal = function(node) {
 	arr.push(node);
 	var cur = 0;
 	var end = 1;
-
 	while(cur < arr.length){
 		end = arr.length;
 		while(cur < end){			
@@ -44,32 +43,12 @@ BinaryTree.prototype.levelTraversal = function(node) {
 };
 	
 BinaryTree.prototype.newToInsert = function(new_data) {
+		
+	var current = this.getFirstCurrentNode(new_data);
 
-	var current = new Node(null,null,null);		
-	var array = this.levelTraversal(this.root);
-
-	if(this.isExist(new_data)){	
-		for(var i = 0; i < array.length; i++){
-			if(array[i].data == new_data){
-				current = array[i];
-				break;
-			}
-		}
-			 
-	}
-	else{
-		array = this.levelTraversal(this.createNewNode(array,new_data)); 
-		for(var i = 0; i < array.length; i++){
-			if(array[i].left != null && array[i].left.data == NYT){
-				current = array[i];
-				break;
-			}
-		}
-	}
-	this.root = array[0];
 	while(current.data != this.root.data){
 		var farthest = {};
-		array = this.levelTraversal(this.root);
+		var array = this.levelTraversal(this.root);
 		
 		for(var i = 1; i < array.length; i++){
 			if(array[i].weight == current.weight && array[i].left != current && array[i].right != current){
@@ -77,7 +56,7 @@ BinaryTree.prototype.newToInsert = function(new_data) {
 				break;
 			}
 		}
-		this.root = this.updateTree(array,current,farthest);
+		this.root = this.swapNode(array,current,farthest);
 		array = this.levelTraversal(this.root);
 		for(var i = 0; i < array.length; i++){
 			if(array[i]){
@@ -92,7 +71,7 @@ BinaryTree.prototype.newToInsert = function(new_data) {
 	this.root.count();
 	return this.huffmanCoder(new_data).join('');
 };
-
+//check the new data is existed in huffman tree or not
 BinaryTree.prototype.isExist = function(new_data) {
 
 	for(var i = 0; i < this.warehouse.length; i++){
@@ -104,7 +83,33 @@ BinaryTree.prototype.isExist = function(new_data) {
 	return false;
 };
 
-BinaryTree.prototype.updateTree = function(array,cur_node,far_node) {
+//when insert new data to huffamn tree, get current node whose weight needs add 1
+BinaryTree.prototype.getFirstCurrentNode = function(new_data) {
+
+	var current = new Node(null,null,null);		
+	var array = this.levelTraversal(this.root);
+	if(this.isExist(new_data)){	
+		for(var i = 0; i < array.length; i++){
+			if(array[i].data == new_data){
+				current = array[i];
+				break;
+			}
+		}	 
+	}
+	else{
+		array = this.levelTraversal(this.createNewNode(array,new_data)); 
+		for(var i = 0; i < array.length; i++){
+			if(array[i].left != null && array[i].left.data == NYT){
+				current = array[i];
+				break;
+			}
+		}
+	}
+	this.root = array[0];
+	return current;
+};
+
+BinaryTree.prototype.swapNode = function(array,cur_node,far_node) {
 
 	for(var i = 1; i < 3; i++){
 		if(array[i]){
@@ -118,7 +123,7 @@ BinaryTree.prototype.updateTree = function(array,cur_node,far_node) {
 			else{
 				if(array[i].left != null){
 					var sub_array = this.levelTraversal(array[i]);
-					array[i] = this.updateTree(sub_array,cur_node,far_node);
+					array[i] = this.swapNode(sub_array,cur_node,far_node);
 				}
 			}
 		}
@@ -130,7 +135,7 @@ BinaryTree.prototype.updateTree = function(array,cur_node,far_node) {
 
 BinaryTree.prototype.createNewNode = function(array, new_data) {
 
-	if(array.length == 1 && array[0].data == 'root'){
+	if(array.length == 1 && array[0].data == Root){
 		array[0].left = new Node(NYT,null,null);
 		array[0].right = new Node(new_data,null,null);
    	 	array[0].right.count();
