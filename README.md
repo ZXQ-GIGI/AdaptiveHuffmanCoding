@@ -2,7 +2,7 @@
 
 This is a simple adaptive huffman encoding algorithm that encodes the text file.</br>
 
-##Usage</br>
+**Usage**</br>
 
 var AHC = require('./AdaptiveHuffmanCoding.js');</br>
 var filePath = './data/input.txt';<br>
