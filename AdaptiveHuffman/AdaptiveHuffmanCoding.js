@@ -41,7 +41,6 @@ BinaryTree.prototype.levelTraversal = function(node) {
 	while(cur < arr.length){
 		end = arr.length;
 		while(cur < end){			
-			//console.log(arr[cur]);
 			if(arr[cur].right){
 				arr.push(arr[cur].right);
 			}
@@ -76,11 +75,8 @@ BinaryTree.prototype.newToInsert = function(new_data) {
 
 		var arrTemp = new Array();
 		newnode = this.createNewNode(array,new_data);
-		console.log('-----------------------------');
-		console.log(newnode);//here is problem.
-		arrTemp = this.levelTraversal(newnode); 
 
-		console.log('==============================');
+		arrTemp = this.levelTraversal(newnode); 
 		for(var i = 0; i < arrTemp.length; i++){
 			if(arrTemp[i].left != null && arrTemp[i].left.data == NYT){
 				current = arrTemp[i];
@@ -105,6 +101,15 @@ BinaryTree.prototype.newToInsert = function(new_data) {
 			}
 		}
 		current = this.updateTree(array,current,farthest);
+		array = this.levelTraversal(this.root);
+		for(var i = 0; i < array.length; i++){
+			if(array[i]){
+				if(array[i].left == current || array[i].right == current){
+					current = array[i];
+					break;
+				}
+			}	
+		}
 	}
 	this.root = current;
 	this.root.data = 'root';
@@ -138,7 +143,7 @@ BinaryTree.prototype.updateTree = function(array,cur_node,far_node) {
 			else{
 				if(array[i].left != null){
 					var sub_array = this.levelTraversal(array[i]);
-					array[0] = this.updateTree(sub_array,cur_node,far_node);
+					array[i] = this.updateTree(sub_array,cur_node,far_node);
 				}
 			}
 		}
@@ -150,7 +155,8 @@ BinaryTree.prototype.updateTree = function(array,cur_node,far_node) {
 }
 
 BinaryTree.prototype.createNewNode = function(array, new_data) {
-	//console.log(array.length);
+	// console.log(array);
+	// console.log('------------------');
 	if(array.length == 1 && array[0].data == 'root'){
 		array[0].left = new Node(NYT,null,null);
 		array[0].right = new Node(new_data,null,null);
@@ -169,13 +175,15 @@ BinaryTree.prototype.createNewNode = function(array, new_data) {
 			else{
 				if(array[i].left != null){
 					var sub_array = this.levelTraversal(array[i]);
-					array[0] = this.createNewNode(sub_array, new_data);
+					array[i] = this.createNewNode(sub_array, new_data);
 				}
 			}	
 		}
 	}
 	array[0].left = array[2];
 	array[0].right = array[1];
+	// console.log(array[0]);
+	// console.log('----------------------------------');
 	return array[0];
 }
 
@@ -192,7 +200,6 @@ function AdaptiveHuffman(filePath){
 				console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< start');
 				console.log(i + ":" + data[i]);
 				this.huffmanTree.newToInsert(data[i]);
-				//console.log(this.huffmanTree);
 			}
 		});
 	}
