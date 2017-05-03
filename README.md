@@ -1,12 +1,11 @@
-# AdaptiveHuffmanCoding
+# AdaptiveHuffmanCoding</br>
 
-This is a simple adaptive huffman encoding algorithm that encodes the text file.
+This is a simple adaptive huffman encoding algorithm that encodes the text file.</br>
 
-##Usage
+##Usage</br>
 
-var AHC = require('./AdaptiveHuffmanCoding.js');
-var filePath = './data/input.txt';   
-
-var test = new AHC(filePath);
-test.coding();
+var AHC = require('./AdaptiveHuffmanCoding.js');</br>
+var filePath = './data/input.txt';<br>
+var test = new AHC(filePath);<br>
+test.coding();<br>
 
