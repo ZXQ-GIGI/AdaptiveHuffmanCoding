@@ -2,9 +2,6 @@
 
 var AHC = require('./AdaptiveHuffmanCoding.js');
 
-var filePath = './input.txt';
+var filePath = './data/input.txt';
 var test = new AHC(filePath);
-test.coding();
-
-
-
+test.encode();

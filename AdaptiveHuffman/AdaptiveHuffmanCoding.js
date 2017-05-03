@@ -83,7 +83,7 @@ BinaryTree.prototype.isExist = function(new_data) {
 	return false;
 };
 
-//when insert new data to huffamn tree, get current node whose weight needs add 1
+//when inserting new data to huffamn tree, get current node whose weight needs add 1
 BinaryTree.prototype.getFirstCurrentNode = function(new_data) {
 
 	var current = new Node(null,null,null);		
@@ -187,7 +187,7 @@ function AdaptiveHuffman(filePath){
 	this.filePath = filePath;
 	this.huffmanTree = new BinaryTree();
 
-	this.coding = function(){
+	this.encode = function(){
 		fs.readFile(this.filePath, 'utf8', (err,data)=>{
 			if(err){
 				throw err;
@@ -200,7 +200,10 @@ function AdaptiveHuffman(filePath){
 		});
 	}
 	this.toSave = function(string){
-		fs.writeFile('output.txt',string,'utf8',(err)=>{
+		var outPath = this.filePath.split('');
+		outPath.splice(outPath.lastIndexOf('.'),0,'_huffman');
+		outPath = outPath.join('');
+		fs.writeFile(outPath,string,'utf8',(err)=>{
 			if(err){
 				throw err;
 			}
